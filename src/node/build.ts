@@ -1,28 +1,28 @@
-import { InlineConfig, build as viteBuild } from "vite";
-import { CLIENT_ENTRY_PATH, SERVER_ENTRY_PATH } from "./constants";
-import path = require("path");
-import type { RollupOutput } from "rollup";
-import PluginReact from "@vitejs/plugin-react";
-import fs from "fs-extra";
-import ora from "ora";
+import { InlineConfig, build as viteBuild } from 'vite';
+import { CLIENT_ENTRY_PATH, SERVER_ENTRY_PATH } from './constants';
+import path = require('path');
+import type { RollupOutput } from 'rollup';
+import PluginReact from '@vitejs/plugin-react';
+import fs from 'fs-extra';
+import ora from 'ora';
 
 export async function bundle(root: string): Promise<[any, any]> {
   try {
     const resolveViteConfig = (isServer: boolean): InlineConfig => {
       return {
-        mode: "production",
+        mode: 'production',
         root,
         plugins: [PluginReact()],
         build: {
           ssr: isServer,
-          outDir: isServer ? ".temp" : "build",
+          outDir: isServer ? '.temp' : 'build',
           rollupOptions: {
             input: isServer ? SERVER_ENTRY_PATH : CLIENT_ENTRY_PATH,
             output: {
-              format: isServer ? "cjs" : "esm",
-            },
-          },
-        },
+              format: isServer ? 'cjs' : 'esm'
+            }
+          }
+        }
       };
     };
 
@@ -38,7 +38,7 @@ export async function bundle(root: string): Promise<[any, any]> {
 
     const [clientBundle, serverBundle] = await Promise.all([
       clientBuild(),
-      serverBuild(),
+      serverBuild()
     ]);
     return [clientBundle, serverBundle];
   } catch (e) {
@@ -53,7 +53,7 @@ export async function renderPage(
 ) {
   const appHtml = render();
   const clientChunk = clientBundle.output.find(
-    (chunk) => chunk.type === "chunk" && chunk.isEntry
+    (chunk) => chunk.type === 'chunk' && chunk.isEntry
   );
   const html = `
     <!DOCTYPE html>
@@ -69,15 +69,15 @@ export async function renderPage(
       </body>
     </html>
     `.trim();
-  await fs.writeFile(path.join(root, "build", "index.html"), html);
-  await fs.remove(path.join(root, ".temp"));
+  await fs.writeFile(path.join(root, 'build', 'index.html'), html);
+  await fs.remove(path.join(root, '.temp'));
 }
 
 export async function build(root: string) {
   // 1. bundle client + server
   const [clientBundle, serverBundle] = await bundle(root);
   // 2. 引入server-entry
-  const serverEntryPath = path.resolve(root, ".temp", "ssr-entry.js");
+  const serverEntryPath = path.resolve(root, '.temp', 'ssr-entry.js');
   // 3. 服务端渲染，产出html
   const { render } = await import(serverEntryPath);
   await renderPage(render, root, clientBundle as RollupOutput);
