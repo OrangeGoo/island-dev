@@ -1,4 +1,5 @@
-import { relative } from 'path';
+import { PACKAGE_ROOT } from 'node/constants';
+import { join, relative } from 'path';
 import { SiteConfig } from 'shared/types/index';
 import { Plugin, ViteDevServer } from 'vite';
 
@@ -6,7 +7,7 @@ const SITE_DATA_ID = 'island:site-data';
 
 export function pluginConfig(
   config: SiteConfig,
-  restart: () => Promise<void>
+  restart?: () => Promise<void>
 ): Plugin {
   // let server: ViteDevServer | null = null;
   return {
@@ -24,6 +25,15 @@ export function pluginConfig(
     // configureServer(s) {
     //   server = s;
     // },
+    config() {
+      return {
+        resolve: {
+          alias: {
+            '@runtime': join(PACKAGE_ROOT, 'src', 'runtime', 'index.ts')
+          }
+        }
+      };
+    },
     async handleHotUpdate(ctx) {
       const customWatchedFiles = [config.configPath];
       const include = (id: string) =>

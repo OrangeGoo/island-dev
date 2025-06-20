@@ -12,7 +12,7 @@ export async function createDevServer(
   const config = await resolveConfig(root, 'serve', 'development');
   console.log(config.siteData);
   return createServer({
-    root,
+    root: PACKAGE_ROOT,
     plugins: [pluginIndexHtml(), PluginReact(), pluginConfig(config, restart)],
     server: {
       fs: {

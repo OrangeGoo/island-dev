@@ -5,14 +5,22 @@ import type { RollupOutput } from 'rollup';
 import PluginReact from '@vitejs/plugin-react';
 import fs from 'fs-extra';
 import ora from 'ora';
+import { SiteConfig } from 'shared/types';
+import { pluginConfig } from './plugin-island/config';
 
-export async function bundle(root: string): Promise<[any, any]> {
+export async function bundle(
+  root: string,
+  config: SiteConfig
+): Promise<[any, any]> {
   try {
     const resolveViteConfig = (isServer: boolean): InlineConfig => {
       return {
         mode: 'production',
         root,
-        plugins: [PluginReact()],
+        plugins: [PluginReact(), pluginConfig(config)],
+        ssr: {
+          noExternal: ['react-router-dom']
+        },
         build: {
           ssr: isServer,
           outDir: isServer ? '.temp' : 'build',
@@ -73,9 +81,9 @@ export async function renderPage(
   await fs.remove(path.join(root, '.temp'));
 }
 
-export async function build(root: string) {
+export async function build(root: string, config: SiteConfig) {
   // 1. bundle client + server
-  const [clientBundle, serverBundle] = await bundle(root);
+  const [clientBundle, serverBundle] = await bundle(root, config);
   // 2. 引入server-entry
   const serverEntryPath = path.resolve(root, '.temp', 'ssr-entry.js');
   // 3. 服务端渲染，产出html

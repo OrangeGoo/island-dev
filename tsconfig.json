@@ -8,6 +8,9 @@
     "skipLibCheck": true,
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "baseUrl": "src"
+    "baseUrl": "src",
+    "paths": {
+      "@runtime": ["runtime/index.ts"]
+    }
   }
 }
