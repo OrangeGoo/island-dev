@@ -1,12 +1,11 @@
-import { InlineConfig, build as viteBuild } from 'vite';
+import { InlineConfig, PluginOption, build as viteBuild } from 'vite';
 import { CLIENT_ENTRY_PATH, SERVER_ENTRY_PATH } from './constants';
 import path = require('path');
 import type { RollupOutput } from 'rollup';
-import PluginReact from '@vitejs/plugin-react';
 import fs from 'fs-extra';
 import ora from 'ora';
 import { SiteConfig } from 'shared/types';
-import { pluginConfig } from './plugin-island/config';
+import { createVitePlugins } from './vitePlugins';
 
 export async function bundle(
   root: string,
@@ -17,7 +16,7 @@ export async function bundle(
       return {
         mode: 'production',
         root,
-        plugins: [PluginReact(), pluginConfig(config)],
+        plugins: createVitePlugins(config),
         ssr: {
           noExternal: ['react-router-dom']
         },
