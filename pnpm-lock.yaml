@@ -66,6 +66,9 @@ importers:
       '@types/fs-extra':
         specifier: ^9.0.13
         version: 9.0.13
+      '@types/hast':
+        specifier: ^2.3.4
+        version: 2.3.10
       '@types/node':
         specifier: ^20.14.8
         version: 20.14.8
@@ -144,6 +147,9 @@ importers:
       unified:
         specifier: ^10.1.2
         version: 10.1.2
+      unist-util-visit:
+        specifier: ^4.1.1
+        version: 4.1.2
       vitest:
         specifier: ^0.25.2
         version: 0.25.8(@vitest/ui@0.25.8)
