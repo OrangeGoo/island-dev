@@ -17,6 +17,9 @@ importers:
       '@vitejs/plugin-react':
         specifier: ^2.2.0
         version: 2.2.0(vite@3.2.11(@types/node@20.14.8))
+      acorn:
+        specifier: ^8.8.1
+        version: 8.14.1
       cac:
         specifier: ^6.7.14
         version: 6.7.14
@@ -26,6 +29,9 @@ importers:
       fs-extra:
         specifier: ^10.1.0
         version: 10.1.0
+      github-slugger:
+        specifier: ^2.0.0
+        version: 2.0.0
       hast-util-from-html:
         specifier: ^1.0.0
         version: 1.0.2
@@ -75,6 +81,9 @@ importers:
       '@types/hast':
         specifier: ^2.3.4
         version: 2.3.10
+      '@types/mdast':
+        specifier: ^3.0.10
+        version: 3.0.15
       '@types/node':
         specifier: ^20.14.8
         version: 20.14.8
@@ -120,6 +129,9 @@ importers:
       lint-staged:
         specifier: ^13.0.3
         version: 13.3.0
+      mdast-util-mdxjs-esm:
+        specifier: ^1.3.0
+        version: 1.3.1
       prettier:
         specifier: ^2.7.1
         version: 2.8.8
@@ -129,12 +141,18 @@ importers:
       rehype-stringify:
         specifier: ^9.0.3
         version: 9.0.4
+      remark-mdx:
+        specifier: ^2.1.5
+        version: 2.3.0
       remark-parse:
         specifier: ^10.0.1
         version: 10.0.2
       remark-rehype:
         specifier: ^10.1.0
         version: 10.1.0
+      remark-stringify:
+        specifier: ^10.0.2
+        version: 10.0.3
       rollup:
         specifier: ^3.2.3
         version: 3.29.5
@@ -2937,6 +2955,9 @@ packages:
   remark-rehype@10.1.0:
     resolution: {integrity: sha512-EFmR5zppdBp0WQeDVZ/b66CWJipB2q2VLNFMabzDSGR66Z2fQii83G5gTBbgGEnEEA0QRussvrFHxk1HWGJskw==}
 
+  remark-stringify@10.0.3:
+    resolution: {integrity: sha512-koyOzCMYoUHudypbj4XpnAKFbkddRMYZHwghnxd7ue5210WzGw6kOBwauJTRUMq16jsovXx8dYNvSSWP89kZ3A==}
+
   require-directory@2.1.1:
     resolution: {integrity: sha512-fGxEI7+wsG9xrvdjsrlmL22OMTTiHRwAMroiEeMgq8gzoLC/PQr7RsRDSTLUg/bZAZtF+TVIkHc6/4RIKrui+Q==}
     engines: {node: '>=0.10.0'}
@@ -3825,7 +3846,7 @@ snapshots:
       '@types/node': 20.5.1
       chalk: 4.1.2
       cosmiconfig: 8.3.6(typescript@4.9.5)
-      cosmiconfig-typescript-loader: 4.4.0(@types/node@20.5.1)(cosmiconfig@8.3.6(typescript@4.9.5))(ts-node@10.9.2(@types/node@20.14.8)(typescript@4.9.5))(typescript@4.9.5)
+      cosmiconfig-typescript-loader: 4.4.0(@types/node@20.5.1)(cosmiconfig@8.3.6(typescript@4.9.5))(ts-node@10.9.2(@types/node@20.5.1)(typescript@4.9.5))(typescript@4.9.5)
       lodash.isplainobject: 4.0.6
       lodash.merge: 4.6.2
       lodash.uniq: 4.5.0
@@ -4703,7 +4724,7 @@ snapshots:
 
   convert-source-map@2.0.0: {}
 
-  cosmiconfig-typescript-loader@4.4.0(@types/node@20.5.1)(cosmiconfig@8.3.6(typescript@4.9.5))(ts-node@10.9.2(@types/node@20.14.8)(typescript@4.9.5))(typescript@4.9.5):
+  cosmiconfig-typescript-loader@4.4.0(@types/node@20.5.1)(cosmiconfig@8.3.6(typescript@4.9.5))(ts-node@10.9.2(@types/node@20.5.1)(typescript@4.9.5))(typescript@4.9.5):
     dependencies:
       '@types/node': 20.5.1
       cosmiconfig: 8.3.6(typescript@4.9.5)
@@ -6875,6 +6896,12 @@ snapshots:
       '@types/hast': 2.3.10
       '@types/mdast': 3.0.15
       mdast-util-to-hast: 12.3.0
+      unified: 10.1.2
+
+  remark-stringify@10.0.3:
+    dependencies:
+      '@types/mdast': 3.0.15
+      mdast-util-to-markdown: 1.5.0
       unified: 10.1.2
 
   require-directory@2.1.1: {}
