@@ -3,6 +3,7 @@ import { PACKAGE_ROOT } from './constants';
 import { resolveConfig } from './config';
 import { createVitePlugins } from './vitePlugins';
 import { Plugin } from 'vite';
+
 export async function createDevServer(
   root: string,
   restart: () => Promise<void>
@@ -11,7 +12,7 @@ export async function createDevServer(
   console.log(config.siteData);
   return createServer({
     root: PACKAGE_ROOT,
-    plugins: createVitePlugins(config, restart),
+    plugins: await createVitePlugins(config, restart),
     server: {
       fs: {
         allow: [PACKAGE_ROOT]
