@@ -1,4 +1,4 @@
-import { InlineConfig, PluginOption, build as viteBuild } from 'vite';
+import { InlineConfig, build as viteBuild } from 'vite';
 import { CLIENT_ENTRY_PATH, SERVER_ENTRY_PATH } from './constants';
 import path = require('path');
 import type { RollupOutput } from 'rollup';
@@ -6,6 +6,7 @@ import fs from 'fs-extra';
 import ora from 'ora';
 import { SiteConfig } from 'shared/types';
 import { createVitePlugins } from './vitePlugins';
+import { Route } from './plugin-routes';
 
 export async function bundle(
   root: string,
@@ -18,13 +19,15 @@ export async function bundle(
       return {
         mode: 'production',
         root,
-        plugins: await createVitePlugins(config),
+        plugins: await createVitePlugins(config, undefined, isServer),
         ssr: {
           noExternal: ['react-router-dom']
         },
         build: {
           ssr: isServer,
-          outDir: isServer ? '.temp' : 'build',
+          outDir: isServer
+            ? path.join(root, '.temp')
+            : path.join(root, 'build'),
           rollupOptions: {
             input: isServer ? SERVER_ENTRY_PATH : CLIENT_ENTRY_PATH,
             output: {
@@ -43,8 +46,6 @@ export async function bundle(
       return viteBuild(await resolveViteConfig(true));
     };
 
-    const spinner = ora();
-
     const [clientBundle, serverBundle] = await Promise.all([
       clientBuild(),
       serverBuild()
@@ -56,15 +57,19 @@ export async function bundle(
 }
 
 export async function renderPage(
-  render: () => string,
+  render: (pagePath: string) => string,
   root: string,
-  clientBundle: RollupOutput
+  clientBundle: RollupOutput,
+  routes: Route[]
 ) {
-  const appHtml = render();
   const clientChunk = clientBundle.output.find(
     (chunk) => chunk.type === 'chunk' && chunk.isEntry
   );
-  const html = `
+  await Promise.all(
+    routes.map(async (route) => {
+      const routePath = route.path;
+      const appHtml = render(routePath);
+      const html = `
     <!DOCTYPE html>
     <html lang="en">
       <head>
@@ -78,16 +83,22 @@ export async function renderPage(
       </body>
     </html>
     `.trim();
-  await fs.writeFile(path.join(root, 'build', 'index.html'), html);
+      const fileName = routePath.endsWith('/')
+        ? `${routePath}index.html`
+        : `${routePath}.html`;
+      await fs.ensureDir(path.join(root, 'build', path.dirname(fileName)));
+      await fs.writeFile(path.join(root, 'build', fileName), html);
+    })
+  );
   await fs.remove(path.join(root, '.temp'));
 }
 
 export async function build(root: string, config: SiteConfig) {
   // 1. bundle client + server
-  const [clientBundle, serverBundle] = await bundle(root, config);
+  const [clientBundle] = await bundle(root, config);
   // 2. 引入server-entry
   const serverEntryPath = path.resolve(root, '.temp', 'ssr-entry.js');
   // 3. 服务端渲染，产出html
-  const { render } = await import(serverEntryPath);
-  await renderPage(render, root, clientBundle as RollupOutput);
+  const { render, routes } = await import(serverEntryPath);
+  await renderPage(render, root, clientBundle as RollupOutput, routes);
 }
