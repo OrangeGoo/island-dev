@@ -1,5 +1,11 @@
 import { defineConfig } from '../dist/index.mjs';
 
 export default defineConfig({
-  title: '1234'
+  title: 'xxx',
+  themeConfig: {
+    nav: [
+      { text: '主页', link: '/' },
+      { text: '指南', link: '/' }
+    ]
+  }
 });
