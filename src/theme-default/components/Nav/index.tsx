@@ -1,7 +1,8 @@
 import { usePageData } from '@runtime';
 import { NavItemWithLink } from 'shared/types';
 import styles from './index.module.scss';
-console.log(styles);
+import { SwitchAppearance } from '../SwitchAppearance';
+
 function MenuItem(item: NavItemWithLink) {
   return (
     <div className="text-sm font-medium mx-3">
@@ -22,7 +23,7 @@ export function Nav() {
         flex="~"
         items="center"
         justify="between"
-        className="px-8, h-14 divider-bottom"
+        className="px-8 h-14 divider-bottom"
       >
         <div>
           <a
@@ -39,8 +40,14 @@ export function Nav() {
               <MenuItem key={item.text} {...item} />
             ))}
           </div>
-          <div>主题切换按钮</div>
-          <div className={styles.socialLinkIcon}>
+          <div before="menu-item-before" flex="~">
+            <SwitchAppearance />
+          </div>
+          <div
+            className={styles.socialLinkIcon}
+            before="menu-item-before"
+            ml="2"
+          >
             <a href="https://github.com/island-js/island.js">
               <div className="i-carbon-logo-github w-5 h-5 fill-current"></div>
             </a>
