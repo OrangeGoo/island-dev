@@ -43,12 +43,36 @@ export interface SiteConfig {
 }
 
 export type PageType = 'home' | 'doc' | 'custom' | '404';
+
+export interface Feature {
+  title: string;
+  details: string;
+  icon: string;
+}
+
+export interface Hero {
+  name: string;
+  text: string;
+  tagline: string;
+  image?: {
+    src: string;
+    alt: string;
+  };
+  actions: {
+    text: string;
+    link: string;
+    theme: 'brand' | 'alt';
+  }[];
+}
+
 export interface FrontMatter {
   title?: string;
   description?: string;
   pageType?: PageType;
   sidebar?: boolean;
   outline?: boolean;
+  features?: Feature[];
+  hero?: Hero;
 }
 
 export interface Header {

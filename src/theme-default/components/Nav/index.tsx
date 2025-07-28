@@ -48,7 +48,7 @@ export function Nav() {
             before="menu-item-before"
             ml="2"
           >
-            <a href="https://github.com/island-js/island.js">
+            <a href="https://github.com/OrangeGoo/island-dev">
               <div className="i-carbon-logo-github w-5 h-5 fill-current"></div>
             </a>
           </div>
