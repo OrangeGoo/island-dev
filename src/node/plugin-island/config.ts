@@ -1,6 +1,7 @@
 import { PACKAGE_ROOT } from 'node/constants';
 import { join, relative } from 'path';
 import { SiteConfig } from 'shared/types/index';
+import sirv from 'sirv';
 import { Plugin, ViteDevServer } from 'vite';
 
 const SITE_DATA_ID = 'island:site-data';
@@ -27,6 +28,7 @@ export function pluginConfig(
     // },
     config() {
       return {
+        root: PACKAGE_ROOT,
         resolve: {
           alias: {
             '@runtime': join(PACKAGE_ROOT, 'src', 'runtime', 'index.ts')
@@ -47,14 +49,18 @@ export function pluginConfig(
         console.log(
           `\n${relative(config.root, ctx.file)} changed, restarting server...`
         );
+        // 重启dev server
+        // 方案讨论
+        // 1. 插件内重新启动Vite的dev server
+        // await server.restart();
+        // ❌ 没有作用，因为并没有进行island框架配置的重新读取
+        // 2. 手动调用dev.ts中的createServer
+        await restart();
       }
-      // 重启dev server
-      // 方案讨论
-      // 1. 插件内重新启动Vite的dev server
-      // await server.restart();
-      // ❌ 没有作用，因为并没有进行island框架配置的重新读取
-      // 2. 手动调用dev.ts中的createServer
-      await restart();
+    },
+    configureServer(server) {
+      const publicDir = join(config.root, 'public');
+      server.middlewares.use(sirv(publicDir));
     }
   };
 }
