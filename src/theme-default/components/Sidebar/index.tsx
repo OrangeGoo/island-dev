@@ -29,20 +29,15 @@ export function Sidebar(props: SidebarProps) {
 
   const renderGroup = (item: SidebarGroup) => {
     return (
-      <section
-        key={item.text}
-        block="~"
-        not-first="divider-top mt-4"
-        className={styles.sidebarGroup}
-      >
+      <section key={item.text} block="~" not-first="divider-top mt-4">
         <div flex="~" justify="between" items="center">
           <h2 m="t-3 b-2" text="1rem text-1" font="bold">
             {item.text}
           </h2>
         </div>
         <div mb="1">
-          {item.items.map((item) => {
-            return <div key={item.text}>{renderGroupItem(item)}</div>;
+          {item.items?.map((item) => {
+            return <div key={item.link}>{renderGroupItem(item)}</div>;
           })}
         </div>
       </section>
