@@ -1,9 +1,9 @@
 import { InlineConfig, build as viteBuild } from 'vite';
 import { CLIENT_ENTRY_PATH, SERVER_ENTRY_PATH } from './constants';
-import path = require('path');
+import path from 'path';
 import type { RollupOutput } from 'rollup';
 import fs from 'fs-extra';
-import ora from 'ora';
+// import ora from 'ora';
 import { SiteConfig } from 'shared/types';
 import { createVitePlugins } from './vitePlugins';
 import { Route } from './plugin-routes';
@@ -21,7 +21,7 @@ export async function bundle(
         root,
         plugins: await createVitePlugins(config, undefined, isServer),
         ssr: {
-          noExternal: ['react-router-dom']
+          noExternal: ['react-router-dom', 'lodash-es']
         },
         build: {
           ssr: isServer,
@@ -68,7 +68,7 @@ export async function renderPage(
   await Promise.all(
     routes.map(async (route) => {
       const routePath = route.path;
-      const appHtml = render(routePath);
+      const appHtml = await render(routePath);
       const html = `
     <!DOCTYPE html>
     <html lang="en">
