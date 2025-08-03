@@ -13,6 +13,8 @@ import { createVitePlugins } from './vitePlugins';
 import { Route } from './plugin-routes';
 import { RenderResult } from '../runtime/ssr-entry';
 
+const CLIENT_OUTPUT = 'build';
+
 export async function bundle(
   root: string,
   config: SiteConfig
@@ -32,7 +34,7 @@ export async function bundle(
           ssr: isServer,
           outDir: isServer
             ? path.join(root, '.temp')
-            : path.join(root, 'build'),
+            : path.join(root, CLIENT_OUTPUT),
           rollupOptions: {
             input: isServer ? SERVER_ENTRY_PATH : CLIENT_ENTRY_PATH,
             output: {
@@ -55,6 +57,11 @@ export async function bundle(
       clientBuild(),
       serverBuild()
     ]);
+
+    const publicDir = path.join(root, 'public');
+    if (fs.existsSync(publicDir)) {
+      await fs.copy(publicDir, path.join(root, CLIENT_OUTPUT));
+    }
     return [clientBundle, serverBundle];
   } catch (e) {
     console.log(e);
@@ -135,8 +142,17 @@ export async function renderPage(
   await Promise.all(
     routes.map(async (route) => {
       const routePath = route.path;
-      const { appHtml, islandToPathMap } = await render(routePath);
-      await buildIslands(root, islandToPathMap);
+      const {
+        appHtml,
+        islandToPathMap,
+        islandProps = []
+      } = await render(routePath);
+      const styleAssets = clientBundle.output.filter(
+        (chunk) => chunk.type === 'asset' && chunk.fileName.endsWith('.css')
+      );
+      const islandsBundle = await buildIslands(root, islandToPathMap);
+      const islandsCode = (islandsBundle as RollupOutput).output[0].code;
+
       const html = `
     <!DOCTYPE html>
     <html lang="en">
@@ -144,10 +160,15 @@ export async function renderPage(
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Document</title>
+        ${styleAssets
+          .map((asset) => `<link rel="stylesheet" href="/${asset.fileName}">`)
+          .join('\n')}
       </head>
       <body>
         <div id="root">${appHtml}</div>
+        <script type="module">${islandsCode}</script>
         <script type="module" src="/${clientChunk.fileName}"></script>
+        <script id="island-props">${JSON.stringify(islandProps)}</script>
       </body>
     </html>
     `.trim();
