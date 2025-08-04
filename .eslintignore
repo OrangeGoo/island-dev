@@ -7,3 +7,4 @@ bin
 esm-cjs
 docs
 *.d.ts
+vendors/

@@ -2,6 +2,7 @@ import { InlineConfig, build as viteBuild } from 'vite';
 import {
   CLIENT_ENTRY_PATH,
   MASK_SPLITTER,
+  PACKAGE_ROOT,
   SERVER_ENTRY_PATH
 } from './constants';
 import path from 'path';
@@ -12,6 +13,7 @@ import { SiteConfig } from 'shared/types';
 import { createVitePlugins } from './vitePlugins';
 import { Route } from './plugin-routes';
 import { RenderResult } from '../runtime/ssr-entry';
+import { EXTERNALS } from './constants';
 
 const CLIENT_OUTPUT = 'build';
 
@@ -39,7 +41,8 @@ export async function bundle(
             input: isServer ? SERVER_ENTRY_PATH : CLIENT_ENTRY_PATH,
             output: {
               format: isServer ? 'cjs' : 'esm'
-            }
+            },
+            external: EXTERNALS
           }
         }
       };
@@ -62,6 +65,10 @@ export async function bundle(
     if (fs.existsSync(publicDir)) {
       await fs.copy(publicDir, path.join(root, CLIENT_OUTPUT));
     }
+    await fs.copy(
+      path.join(PACKAGE_ROOT, 'vendors'),
+      path.join(root, CLIENT_OUTPUT)
+    );
     return [clientBundle, serverBundle];
   } catch (e) {
     console.log(e);
@@ -85,7 +92,7 @@ async function buildIslands(
         `import { ${islandName} } from '${islandPath}';`
     )
     .join('')}
-  window.ISLAND = { ${Object.keys(islandToPathMap).join(', ')} };
+  window.ISLANDS = { ${Object.keys(islandToPathMap).join(', ')} };
   window.ISLAND_PROPS = JSON.parse(
     document.getElementById('island-props').textContent
   );
@@ -94,10 +101,14 @@ async function buildIslands(
   const injectId = 'island:inject';
   return viteBuild({
     mode: 'production',
+    esbuild: {
+      jsx: 'automatic'
+    },
     build: {
       outDir: path.join(root, '.temp'),
       rollupOptions: {
-        input: injectId
+        input: injectId,
+        external: EXTERNALS
       }
     },
     plugins: [
@@ -153,6 +164,10 @@ export async function renderPage(
       const islandsBundle = await buildIslands(root, islandToPathMap);
       const islandsCode = (islandsBundle as RollupOutput).output[0].code;
 
+      const normalizeVendorFilename = (name: string) => {
+        const normalizedName = name.replace(/\//g, '_');
+        return `${normalizedName}.js`;
+      };
       const html = `
     <!DOCTYPE html>
     <html lang="en">
@@ -163,6 +178,15 @@ export async function renderPage(
         ${styleAssets
           .map((asset) => `<link rel="stylesheet" href="/${asset.fileName}">`)
           .join('\n')}
+        <script type="importmap">
+          {
+            "imports": {
+              ${EXTERNALS.map(
+                (name) => `"${name}": "/${normalizeVendorFilename(name)}"`
+              ).join(',')}
+            }
+          }
+        </script>
       </head>
       <body>
         <div id="root">${appHtml}</div>
