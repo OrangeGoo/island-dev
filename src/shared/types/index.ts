@@ -86,12 +86,14 @@ export interface PageData {
   pageType: PageType;
   frontmatter: FrontMatter;
   toc?: Header[];
+  title: string;
 }
 
 export interface PageModule {
   default: React.ComponentType;
   frontmatter: FrontMatter;
   toc?: Header[];
+  title: string;
   [key: string]: unknown;
 }
 
