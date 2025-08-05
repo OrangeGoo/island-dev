@@ -4,7 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { initPageData } from './App';
 import { DataContext } from './hooks';
 import { ComponentType } from 'react';
-
+import { HelmetProvider } from 'react-helmet-async';
 declare global {
   interface Window {
     ISLANDS: Record<string, ComponentType<unknown>>;
@@ -20,11 +20,13 @@ async function renderInBrower() {
     const pageData = await initPageData(location.pathname);
 
     createRoot(containerEl).render(
-      <DataContext.Provider value={pageData}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </DataContext.Provider>
+      <HelmetProvider>
+        <DataContext.Provider value={pageData}>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </DataContext.Provider>
+      </HelmetProvider>
     );
   } else {
     const islands = document.querySelectorAll('[__island]');
