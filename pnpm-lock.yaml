@@ -38,6 +38,9 @@ importers:
       cac:
         specifier: ^6.7.14
         version: 6.7.14
+      compression:
+        specifier: ^1.7.4
+        version: 1.7.4
       esbuild:
         specifier: ^0.17.8
         version: 0.17.19
@@ -59,6 +62,9 @@ importers:
       ora:
         specifier: ^6.1.2
         version: 6.3.1
+      polka:
+        specifier: ^0.5.2
+        version: 0.5.2
       react:
         specifier: ^18.2.0
         version: 18.3.1
@@ -243,6 +249,10 @@ packages:
 
   '@antfu/utils@8.1.1':
     resolution: {integrity: sha512-Mex9nXf9vR6AhcXmMrlz/HVgYYZpVGJ6YlPgwl7UnaFpnshXs6EK/oa5Gpf3CzENMjkvEx2tQtntGnb7UtSTOQ==}
+
+  '@arr/every@1.0.1':
+    resolution: {integrity: sha512-UQFQ6SgyJ6LX42W8rHCs8KVc0JS0tzVL9ct4XYedJukskYVWTo49tNiMEK9C2HTyarbNiT/RVIRSY82vH+6sTg==}
+    engines: {node: '>=4'}
 
   '@babel/code-frame@7.26.2':
     resolution: {integrity: sha512-RJlIHRueQgwWitWgF8OdFYGZX328Ax5BCemNGlqHfplnRT9ESi8JkFlvaVYbS+UubVY6dpv87Fs2u5M29iNFVQ==}
@@ -979,6 +989,9 @@ packages:
     engines: {node: '>=14'}
     deprecated: Please update to the latest version of Playwright to test up-to-date browsers.
     hasBin: true
+
+  '@polka/url@0.5.0':
+    resolution: {integrity: sha512-oZLYFEAzUKyi3SKnXvj32ZCEGH6RDnao7COuCVhDydMS9NrCSVXhM79VaKyP5+Zc33m0QXEd2DN3UkU7OsHcfw==}
 
   '@polka/url@1.0.0-next.29':
     resolution: {integrity: sha512-wwQAWhWSuHaag8c4q/KN/vCoeOJYshAIvMQwD4GpSb3OiZklFfvAgmj0VCBBImRpuF/aFgIRzllXlVX93Jevww==}
@@ -2772,6 +2785,10 @@ packages:
   markdown-table@3.0.4:
     resolution: {integrity: sha512-wiYz4+JrLyb/DqW2hkFJxP7Vd7JuTDm77fvbM8VfEQdmSMqcImWeeRbHwZjBjIFki/VaMK2BhFi7oUUZeM5bqw==}
 
+  matchit@1.1.0:
+    resolution: {integrity: sha512-+nGYoOlfHmxe5BW5tE0EMJppXEwdSf8uBA1GTZC7Q77kbT35+VKLYJMzVNWCHSsga1ps1tPYFtFyvxvKzWVmMA==}
+    engines: {node: '>=6'}
+
   math-intrinsics@1.1.0:
     resolution: {integrity: sha512-/IXtbwEk5HTPyEwyKX6hGkYXxM9nbj64B+ilVJnC/R6B0pH5G4V3b0pVbL7DBj4tkhBAppbQUlf6F6Xl9LHu1g==}
     engines: {node: '>= 0.4'}
@@ -3256,6 +3273,9 @@ packages:
     resolution: {integrity: sha512-hzFchhhxnEiPc4qVPs9q2ZR+5eKNifY2hQDHtg1HnTTUuphYCBP8ZRb2si+B1TR7BHirgXaPi48LIye5SgrLAA==}
     engines: {node: '>=14'}
     hasBin: true
+
+  polka@0.5.2:
+    resolution: {integrity: sha512-FVg3vDmCqP80tOrs+OeNlgXYmFppTXdjD5E7I4ET1NjvtNmQrb1/mJibybKkb/d4NA7YWAr1ojxuhpL3FHqdlw==}
 
   possible-typed-array-names@1.1.0:
     resolution: {integrity: sha512-/+5VFTchJDoVj3bhoqi6UeymcD00DAwb1nJwamzPvHEszJ4FpF6SNNbUbOS8yI56qHzdV8eK0qEfOSiodkTdxg==}
@@ -3795,6 +3815,10 @@ packages:
   trough@2.2.0:
     resolution: {integrity: sha512-tmMpK00BjZiUyVyvrBK7knerNgmgvcV/KLVyuma/SC+TQN167GrMRciANTz09+k3zW8L8t60jWO1GpfkZdjTaw==}
 
+  trouter@2.0.1:
+    resolution: {integrity: sha512-kr8SKKw94OI+xTGOkfsvwZQ8mWoikZDd2n8XZHjJVZUARZT+4/VV6cacRS6CLsH9bNm+HFIPU1Zx4CnNnb4qlQ==}
+    engines: {node: '>=6'}
+
   ts-interface-checker@0.1.13:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
 
@@ -4148,6 +4172,8 @@ snapshots:
   '@antfu/utils@0.7.10': {}
 
   '@antfu/utils@8.1.1': {}
+
+  '@arr/every@1.0.1': {}
 
   '@babel/code-frame@7.26.2':
     dependencies:
@@ -4870,6 +4896,8 @@ snapshots:
     dependencies:
       '@types/node': 20.14.8
       playwright-core: 1.26.1
+
+  '@polka/url@0.5.0': {}
 
   '@polka/url@1.0.0-next.29': {}
 
@@ -6900,6 +6928,10 @@ snapshots:
 
   markdown-table@3.0.4: {}
 
+  matchit@1.1.0:
+    dependencies:
+      '@arr/every': 1.0.1
+
   math-intrinsics@1.1.0: {}
 
   mdast-util-definitions@5.1.2:
@@ -7653,6 +7685,11 @@ snapshots:
 
   playwright-core@1.26.1: {}
 
+  polka@0.5.2:
+    dependencies:
+      '@polka/url': 0.5.0
+      trouter: 2.0.1
+
   possible-typed-array-names@1.1.0: {}
 
   postcss-load-config@3.1.4(postcss@8.5.3)(ts-node@10.9.2(@types/node@20.5.1)(typescript@4.9.5)):
@@ -8282,6 +8319,10 @@ snapshots:
   trim-newlines@3.0.1: {}
 
   trough@2.2.0: {}
+
+  trouter@2.0.1:
+    dependencies:
+      matchit: 1.1.0
 
   ts-interface-checker@0.1.13: {}
 
