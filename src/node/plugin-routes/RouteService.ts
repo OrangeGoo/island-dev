@@ -49,7 +49,7 @@ export class RouteService {
     return routePath.startsWith('/') ? routePath : `/${routePath}`;
   }
 
-  generateRoutesCode(ssr: boolean) {
+  generateRoutesCode(ssr = false) {
     return `
 import React from 'react';
 ${ssr ? '' : 'import loadable from "@loadable/component";'}

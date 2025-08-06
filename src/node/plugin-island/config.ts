@@ -3,6 +3,7 @@ import { join, relative } from 'path';
 import { SiteConfig } from 'shared/types/index';
 import sirv from 'sirv';
 import { Plugin, ViteDevServer } from 'vite';
+import fs from 'fs-extra';
 
 const SITE_DATA_ID = 'island:site-data';
 
@@ -60,7 +61,9 @@ export function pluginConfig(
     },
     configureServer(server) {
       const publicDir = join(config.root, 'public');
-      server.middlewares.use(sirv(publicDir));
+      if (fs.existsSync(publicDir)) {
+        server.middlewares.use(sirv(publicDir));
+      }
     }
   };
 }
